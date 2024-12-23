@@ -39,6 +39,11 @@ independence:
     path: https://enovel.transchinese.org
     url: https://enovel.transchinese.org
 
+  - name: TSF 变身文学档案（CDBOOK 短篇）
+    description: 包含伪娘、男娘、变性、TS 变身文学与跨性别相关小说（成人与限制级）的内容，主要来自 CDBOOK 网站存档。
+    path: https://archive.cdtsf.com
+    url: https://archive.cdtsf.com
+
 ignore:
   - '.*\.github.*'
   - '.*\.git.*'
