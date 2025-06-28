@@ -1,0 +1,62 @@
+[
+  {
+    "name": "跨性别与多元性别新闻网页档案库",
+    "description": "保存各类跨性别与多元性别相关的新闻网页存档和相关图片。",
+    "path": "https://news.transchinese.org/",
+    "url": "https://news.transchinese.org/",
+    "is_restricted": false,
+    "type": "resource",
+    "size": 3883,
+    "last_updated": null
+  },
+  {
+    "name": "跨性别与多元性别文档档案库",
+    "description": "保存各类资料、书籍、论文、报告、演示文稿等与跨性别和多元性别相关的独立文件。",
+    "path": "https://digital.transchinese.org/",
+    "url": "https://digital.transchinese.org/",
+    "is_restricted": false,
+    "type": "resource",
+    "size": 1406,
+    "last_updated": null
+  },
+  {
+    "name": "伪娘与性转相关漫画存档库",
+    "description": "保存各类性转相关漫画存档和相关图片。",
+    "path": "https://comic.transchinese.org/",
+    "url": "https://comic.transchinese.org/",
+    "is_restricted": false,
+    "type": "comic",
+    "size": 3409,
+    "last_updated": null
+  },
+  {
+    "name": "变身文学与小说存档库一（未分类）",
+    "description": "保存各类变身、伪娘、性转文学与小说存档，主要关注剧情，按短篇长篇分类。",
+    "path": "https://novel.transchinese.org",
+    "url": "https://novel.transchinese.org",
+    "is_restricted": false,
+    "type": "novel",
+    "size": 2549,
+    "last_updated": null
+  },
+  {
+    "name": "变身文学与小说存档库二（变百/变嫁）",
+    "description": "保存各类变身、伪娘、性转文学与小说存档，按变百或变嫁内容分类，主要关注剧情。可能较老。",
+    "path": "https://xnovel.transchinese.org",
+    "url": "https://xnovel.transchinese.org",
+    "is_restricted": false,
+    "type": "novel",
+    "size": 1721,
+    "last_updated": null
+  },
+  {
+    "name": "变身文学与小说存档库三（持续更新）",
+    "description": "保存各类 CDTS、变身、伪娘、性转文学与变身小说存档，持续更新中。",
+    "path": "https://unovel.transchinese.org",
+    "url": "https://unovel.transchinese.org",
+    "is_restricted": false,
+    "type": "novel",
+    "size": 894,
+    "last_updated": null
+  }
+]
