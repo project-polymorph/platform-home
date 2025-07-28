@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "gender-diversity-library": {
+      "url": "https://your-vercel-app.vercel.app/api/mcp",
+      "description": "Search the Chinese Digital Library for Gender Diversity",
+      "headers": {
+        "Content-Type": "application/json"
+      }
+    }
+  }
+}
