@@ -1,0 +1,44 @@
+
+  <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+      <title>多元性别中文数字图书馆</title>
+      <link>https://transchinese.org/blog</link>
+      <description>希望成为中文多元性别社群历史的见证者</description>
+      <language>zh</language>
+      <managingEditor>admin@transchinese.org (性与性别多态计划)</managingEditor>
+      <webMaster>admin@transchinese.org (性与性别多态计划)</webMaster>
+      <lastBuildDate>Mon, 13 Jan 2025 00:00:00 GMT</lastBuildDate>
+      <atom:link href="https://transchinese.org/feed.xml" rel="self" type="application/rss+xml"/>
+      
+  <item>
+    <guid>https://transchinese.org/blog/methods</guid>
+    <title>中文多元性别数字档案的关键词检索策略</title>
+    <link>https://transchinese.org/blog/methods</link>
+    <description>中文多元性别数字档案已积累了数万条相关数据。本文将介绍我们如何通过选取多元性别相关关键词的方式，尽可能全面地保留社会对多元性别的种种表述与视角。</description>
+    <pubDate>Mon, 13 Jan 2025 00:00:00 GMT</pubDate>
+    <author>admin@transchinese.org (性与性别多态计划)</author>
+    
+  </item>
+
+  <item>
+    <guid>https://transchinese.org/blog/archive</guid>
+    <title>跨性别档案实践的全球经验与中文路径</title>
+    <link>https://transchinese.org/blog/archive</link>
+    <description>跨性别与多元性别档案实践，既是对当下社群真实处境的见证，也是在为未来保存一段弥足珍贵的历史。本文将通过回顾全球跨性别档案实践的经验，深入探讨中文互联网环境下的特殊性与潜在机遇，进而梳理一条适用于中文母语世界的跨性别档案路径，以期为后来者提供参考与启示。</description>
+    <pubDate>Fri, 10 Jan 2025 00:00:00 GMT</pubDate>
+    <author>admin@transchinese.org (性与性别多态计划)</author>
+    
+  </item>
+
+  <item>
+    <guid>https://transchinese.org/blog/release-of-tailwind-nextjs-starter-blog-v2.0</guid>
+    <title>在AI淹没网络之前：守护多元性别的数字火种</title>
+    <link>https://transchinese.org/blog/release-of-tailwind-nextjs-starter-blog-v2.0</link>
+    <description>在信息过载的时代，真相变得越来越难以辨别。当AI生成的内容数量远远超过人类原创内容时，我们将面临一个可怕的现实：我们感知世界的方式本身可能已经被算法重新定义。</description>
+    <pubDate>Wed, 27 Nov 2024 00:00:00 GMT</pubDate>
+    <author>admin@transchinese.org (性与性别多态计划)</author>
+    
+  </item>
+
+    </channel>
+  </rss>
