@@ -48,12 +48,3 @@ jobs:
           projectName: transchinese-org  # 生产环境项目名
           directory: out
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          
-      - name: Deploy to Cloudflare Pages (Test)
-        uses: cloudflare/pages-action@v1
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: transchinese-test  # 测试环境项目名
-          directory: out
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
