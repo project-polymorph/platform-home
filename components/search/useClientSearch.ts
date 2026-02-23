@@ -9,6 +9,11 @@ const REPO_INDEXES: Record<string, string> = {
   "comic.transchinese.org": "/search-index/repo-comic-transchinese-org.json.gz",
   "archive.cdtsf.com": "/search-index/repo-archive-cdtsf-com.json.gz",
   "news.transchinese.org": "/search-index/repo-news-transchinese-org.json.gz",
+  "enovel.cdtsf.com": "/search-index/repo-enovel-cdtsf-com.json.gz",
+  "fnovel.cdtsf.com": "/search-index/repo-fnovel-cdtsf-com.json.gz",
+  "snovel.cdtsf.com": "/search-index/repo-snovel-cdtsf-com.json.gz",
+  "unovel.transchinese.org": "/search-index/repo-unovel-transchinese-org.json.gz",
+  "xnovel.transchinese.org": "/search-index/repo-xnovel-transchinese-org.json.gz",
 }
 
 const cache: Record<string, any> = {}
