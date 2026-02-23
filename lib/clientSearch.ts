@@ -51,9 +51,17 @@ export async function clientSearch(
     : Object.keys(REPO_INDEXES)
   const lowerQuery = query.toLowerCase()
   const found: SearchResult[] = []
-  for (const d of domains) {
+
+  // Load all requested domain indexes in parallel to reduce overall latency.
+  const indexResults = await Promise.all(
+    domains.map(async (d) => {
+      const index = await loadIndex(d)
+      return { domain: d, index }
+    })
+  )
+
+  for (const { domain: d, index } of indexResults) {
     if (found.length >= 100) break
-    const index = await loadIndex(d)
     if (!index) continue
     for (const [key, doc] of Object.entries(index)) {
       if (found.length >= 100) break
