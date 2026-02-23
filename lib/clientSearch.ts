@@ -15,23 +15,28 @@ const REPO_INDEXES: Record<string, string> = {
   "xnovel.transchinese.org": "/search-index/repo-xnovel-transchinese-org.json.gz",
 }
 
-const cache: Record<string, any> = {}
+const cache: Record<string, Promise<any | null>> = {}
 
 async function loadIndex(domain: string): Promise<any | null> {
-  if (cache[domain]) return cache[domain]
+  if (domain in cache) {
+    return cache[domain]
+  }
   const file = REPO_INDEXES[domain]
   if (!file) return null
-  try {
-    const res = await fetch(file)
-    const compressed = await res.arrayBuffer()
-    const decompressed = pako.inflate(new Uint8Array(compressed), { to: 'string' })
-    const data = JSON.parse(decompressed)
-    cache[domain] = data
-    return data
-  } catch (e) {
-    console.error('Failed to load', domain, e)
-    return null
-  }
+  const promise: Promise<any | null> = (async () => {
+    try {
+      const res = await fetch(file)
+      const compressed = await res.arrayBuffer()
+      const decompressed = pako.inflate(new Uint8Array(compressed), { to: 'string' })
+      const data = JSON.parse(decompressed)
+      return data
+    } catch (e) {
+      console.error('Failed to load', domain, e)
+      return null
+    }
+  })()
+  cache[domain] = promise
+  return promise
 }
 
 export async function clientSearch(
@@ -41,7 +46,9 @@ export async function clientSearch(
   year?: string,
   region?: string
 ): Promise<SearchResult[]> {
-  const domains = domain ? domain.split(',') : Object.keys(REPO_INDEXES)
+  const domains = domain
+    ? domain.split(',').map(d => d.trim()).filter(Boolean)
+    : Object.keys(REPO_INDEXES)
   const lowerQuery = query.toLowerCase()
   const found: SearchResult[] = []
   for (const d of domains) {
@@ -54,8 +61,8 @@ export async function clientSearch(
       const keyLower = key.toLowerCase()
       const descLower = (docAny.description || '').toLowerCase()
       if (lowerQuery && !keyLower.includes(lowerQuery) && !descLower.includes(lowerQuery)) continue
-      if (tag && docAny.tags && !docAny.tags.includes(tag)) continue
-      if (year && docAny.date && !docAny.date.includes(year)) continue
+      if (tag && (!docAny.tags || !docAny.tags.includes(tag))) continue
+      if (year && (!docAny.date || !docAny.date.includes(year))) continue
       if (region && docAny.region !== region) continue
       found.push({
         url: 'https://' + d + '/' + key.replace(/\.[^/.]+$/, ''),
