@@ -1,6 +1,6 @@
 name = "transchinese-test"
 compatibility_date = "2024-01-01"
-account_id = "bc82e687de1803b47adc1dfe23aca0a4"
+account_id = "${CLOUDFLARE_ACCOUNT_ID}"
 
 [site]
 bucket = "./out"
