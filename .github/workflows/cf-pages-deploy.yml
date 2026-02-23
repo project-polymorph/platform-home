@@ -16,16 +16,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-          
-      - name: Remove yarn.lock if exists
-        run: rm -f yarn.lock
+          cache: 'yarn'
           
       - name: Install dependencies
-        run: npm ci --legacy-peer-deps
+        run: yarn install --frozen-lockfile
         
       - name: Build
-        run: EXPORT=true UNOPTIMIZED=true npm run build
+        run: EXPORT=true UNOPTIMIZED=true yarn build
         env:
           NODE_OPTIONS: '--max-old-space-size=4096'
         
