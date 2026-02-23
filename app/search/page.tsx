@@ -3,8 +3,7 @@ import React, { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import SearchForm from '@/components/search/SearchForm'
 import SearchResults from '@/components/search/SearchResults'
-import { SearchParams as SearchParamsType } from '@/components/search/SearchResult'
-import { useClientSearch } from '@/components/search/useClientSearch'
+import { SearchResult } from '@/components/search/SearchResult'
 
 // Loading component
 const SearchLoading = () => (
@@ -13,42 +12,87 @@ const SearchLoading = () => (
   </div>
 )
 
+// Define proper types for search parameters
+interface SearchParams {
+  query: string
+  domain?: string | null
+  tag?: string | null
+  year?: string | null
+  region?: string | null
+}
+
 // Main search component
 function SearchContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const { search, isSearching, error, results } = useClientSearch()
+  const [isSearching, setIsSearching] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [results, setResults] = useState<SearchResult[]>([])
 
-  useEffect(() => {
-    const query = searchParams.get('term') || ''
-    const domain = searchParams.get('domain') || ''
-    const tag = searchParams.get('tag') || ''
-    const year = searchParams.get('year') || ''
-    const region = searchParams.get('region') || ''
+  // Check if any search parameters exist
+  const hasSearchParams = () => {
+    return Boolean(
+      searchParams.get('term') ||
+        searchParams.get('domain') ||
+        searchParams.get('tag') ||
+        searchParams.get('year') ||
+        searchParams.get('region')
+    )
+  }
+
+  // Perform initial search with params
+  const performInitialSearch = () => {
+    const query = searchParams.get('term')
+    const domain = searchParams.get('domain')
+    const tag = searchParams.get('tag')
+    const year = searchParams.get('year')
+    const region = searchParams.get('region')
 
     if (query || domain || tag || year || region) {
-      search({ 
-        query, 
-        domain: domain || undefined, 
-        tag: tag || undefined, 
-        year: year || undefined, 
-        region: region || undefined 
+      handleSearch({
+        query: query || '', // ensure query is never undefined
+        domain: domain || undefined,
+        tag: tag || undefined,
+        year: year || undefined,
+        region: region || undefined,
       })
     }
-  }, [searchParams, search])
+  }
 
-  const handleSearch = (params: SearchParamsType) => {
-    // Update URL with search params
-    const urlParams = new URLSearchParams()
-    if (params.query) urlParams.set('term', params.query)
-    if (params.domain) urlParams.set('domain', params.domain)
-    if (params.tag) urlParams.set('tag', params.tag)
-    if (params.year) urlParams.set('year', params.year)
-    if (params.region) urlParams.set('region', params.region)
-    
-    router.push(`?${urlParams.toString()}`, { scroll: false })
-    
-    search(params)
+  // Update useEffect to use new functions
+  useEffect(() => {
+    if (hasSearchParams()) {
+      performInitialSearch()
+    }
+  }, [searchParams])
+
+  const handleSearch = async ({ query, domain, tag, year, region }: SearchParams) => {
+    setError(null)
+    setIsSearching(true)
+    setResults([])
+
+    try {
+      const params = new URLSearchParams({
+        term: query,
+        ...(domain && { domain }),
+        ...(tag && { tag }),
+        ...(year && { year }),
+        ...(region && { region }),
+      })
+
+      router.push(`?${params.toString()}`, { scroll: false })
+
+      const response = await fetch(`/api/search?${params.toString()}`)
+      if (!response.ok) {
+        throw new Error('Search failed')
+      }
+      const data: SearchResult[] = await response.json()
+      setResults(data)
+    } catch (err) {
+      setError('Search failed. Please try again.')
+    } finally {
+      setIsSearching(false)
+    }
   }
 
   return (

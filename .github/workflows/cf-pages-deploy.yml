@@ -1,8 +1,10 @@
-name: Build and Deploy to CF Pages (Production)
+name: Build and Deploy to CF Pages
 
 on:
   workflow_dispatch:
   push:
+    branches: [main]
+  pull_request:
     branches: [main]
 
 jobs:
@@ -30,9 +32,30 @@ jobs:
           name: build-output
           path: out/
           
-  deploy:
+  deploy-preview:
     needs: build
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
+          path: out/
+          
+      - name: Deploy to Cloudflare Pages (Preview)
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: transchinese-test
+          directory: out
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          
+  deploy-production:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
@@ -45,6 +68,6 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: transchinese-org  # 生产环境项目名
+          projectName: transchinese-org
           directory: out
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
