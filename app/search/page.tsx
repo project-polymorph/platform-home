@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import SearchForm from '@/components/search/SearchForm'
 import SearchResults from '@/components/search/SearchResults'
 import { SearchResult } from '@/components/search/SearchResult'
+import { clientSearch } from '@/lib/clientSearch'
 
 // Loading component
 const SearchLoading = () => (
@@ -82,11 +83,8 @@ function SearchContent() {
 
       router.push(`?${params.toString()}`, { scroll: false })
 
-      const response = await fetch(`/api/search?${params.toString()}`)
-      if (!response.ok) {
-        throw new Error('Search failed')
+      const data = await clientSearch(query, domain || undefined, tag || undefined, year || undefined, region || undefined)
       }
-      const data: SearchResult[] = await response.json()
       setResults(data)
     } catch (err) {
       setError('Search failed. Please try again.')
