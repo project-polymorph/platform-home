@@ -27,19 +27,25 @@ function SearchContent() {
     const region = searchParams.get('region') || ''
 
     if (query || domain || tag || year || region) {
-      search({ query, domain: domain || undefined, tag: tag || undefined, year: year || undefined, region: region || undefined })
+      search({ 
+        query, 
+        domain: domain || undefined, 
+        tag: tag || undefined, 
+        year: year || undefined, 
+        region: region || undefined 
+      })
     }
   }, [searchParams, search])
 
   const handleSearch = (params: SearchParamsType) => {
     // Update URL with search params
-    const urlParams = new URLSearchParams({
-      ...(params.query && { term: params.query }),
-      ...(params.domain && { domain: params.domain }),
-      ...(params.tag && { tag: params.tag }),
-      ...(params.year && { year: params.year }),
-      ...(params.region && { region: params.region }),
-    })
+    const urlParams = new URLSearchParams()
+    if (params.query) urlParams.set('term', params.query)
+    if (params.domain) urlParams.set('domain', params.domain)
+    if (params.tag) urlParams.set('tag', params.tag)
+    if (params.year) urlParams.set('year', params.year)
+    if (params.region) urlParams.set('region', params.region)
+    
     router.push(`?${urlParams.toString()}`, { scroll: false })
     
     search(params)

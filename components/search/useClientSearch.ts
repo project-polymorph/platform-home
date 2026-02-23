@@ -16,23 +16,36 @@ const REPO_INDEXES: Record<string, string> = {
   "xnovel.transchinese.org": "/search-index/repo-xnovel-transchinese-org.json.gz",
 }
 
-const cache: Record<string, any> = {}
+interface IndexDocument {
+  description?: string
+  tags?: string[]
+  type?: string
+  author?: string
+  date?: string
+  region?: string
+  format?: string
+  size?: number
+}
 
-async function loadIndex(domain: string): Promise<any | null> {
+const cache: Record<string, Record<string, IndexDocument>> = {}
+const RESULT_LIMIT = 100
+
+async function loadIndex(domain: string): Promise<Record<string, IndexDocument> | null> {
   if (cache[domain]) return cache[domain]
   const file = REPO_INDEXES[domain]
   if (!file) return null
   
   try {
     const res = await fetch(file)
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
     const compressed = await res.arrayBuffer()
     const decompressed = pako.inflate(new Uint8Array(compressed), { to: 'string' })
-    const data = JSON.parse(decompressed)
+    const data = JSON.parse(decompressed) as Record<string, IndexDocument>
     cache[domain] = data
     return data
   } catch (e) {
     console.error('Failed to load', domain, e)
-    return null
+    throw new Error(`Failed to load index for ${domain}`)
   }
 }
 
@@ -52,39 +65,42 @@ export function useClientSearch() {
       const found: SearchResult[] = []
       
       for (const domain of domains) {
+        if (found.length >= RESULT_LIMIT) break
+        
         const index = await loadIndex(domain)
         if (!index) continue
         
         for (const [key, doc] of Object.entries(index)) {
-          const d = doc as any
+          if (found.length >= RESULT_LIMIT) break
+          
           const keyLower = key.toLowerCase()
-          const descLower = (d.description || '').toLowerCase()
+          const descLower = (doc.description || '').toLowerCase()
           
-          if (lowerQuery && !keyLower.includes(lowerQuery) && !descLower.includes(lowerQuery)) {
-            continue
-          }
+          // 支持中文搜索：检查是否包含查询词
+          const queryMatch = !lowerQuery || 
+            keyLower.includes(lowerQuery) || 
+            descLower.includes(lowerQuery)
           
-          if (params.tag && d.tags && !d.tags.includes(params.tag)) continue
-          if (params.year && d.date && !d.date.includes(params.year)) continue
-          if (params.region && d.region !== params.region) continue
+          if (!queryMatch) continue
           
+          if (params.tag && doc.tags && !doc.tags.includes(params.tag)) continue
+          if (params.year && doc.date && !doc.date.includes(params.year)) continue
+          if (params.region && doc.region !== params.region) continue
+          
+          const url = 'https://' + domain + '/' + key.replace(/\.[^/.]+$/, '')
           found.push({
-            url: 'https://' + domain + '/' + key.replace(/\.[^/.]+$/, ''),
-            description: d.description || '',
-            tags: d.tags || [],
-            type: d.type || '',
-            author: d.author || '',
-            date: d.date || '',
-            region: d.region || '',
-            format: d.format || '',
-            size: d.size || 0,
-            link: 'https://' + domain + '/' + key.replace(/\.[^/.]+$/, ''),
+            url,
+            description: doc.description || '',
+            tags: doc.tags || [],
+            type: doc.type || '',
+            author: doc.author || '',
+            date: doc.date || '',
+            region: doc.region || '',
+            format: doc.format || '',
+            size: doc.size || 0,
+            link: url,
           })
-          
-          if (found.length >= 100) break
         }
-        
-        if (found.length >= 100) break
       }
       
       setResults(found)
