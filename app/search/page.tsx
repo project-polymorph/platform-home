@@ -84,7 +84,6 @@ function SearchContent() {
       router.push(`?${params.toString()}`, { scroll: false })
 
       const data = await clientSearch(query, domain || undefined, tag || undefined, year || undefined, region || undefined)
-      }
       setResults(data)
     } catch (err) {
       setError('Search failed. Please try again.')
